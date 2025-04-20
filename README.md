@@ -89,16 +89,18 @@ tip: 一律使用 json 格式发送消息
 - server-broadcast-file - 广播发送文件，不支持大文件
 
 ```
- //todo
-```
-
-- server-toSelectUser-message - 对选择的用户发送文本，包括自己，共计两人
 
 ```
-  // 接收字段
-  {name:string,account:string,custom?:object,message:string}
-  // 返回字段
-  {name:string,account:string,custom?:object, message:string}
+
+- user-broadcast-file_data - 用户决定获得该文件的时候使用
+
+- server-toSelectUser-message - 对选择的用户,自己发送文本，共计两人
+
+```
+  // 接收字段 senderId,receiverId,标准数据
+  {senderId,receiverId,{name:string,account:string,custom?:object,message:string}}
+  // 发送字段二人一致 senderId,receiverId,标准数据
+  {senderId,receiverId,name:string,account:string,custom?:object, message:string}
 ```
 
 - server-toSelectUser-file - 对选择的用户发送文件，包括自己，共计两人，小文件直接发送，可以发送大型文件，但是需要选择中的用户同意才可以传输
@@ -107,11 +109,21 @@ tip: 一律使用 json 格式发送消息
 //todo
 ```
 
+- server-toSelectUser-request_self - 好友请求发起者 发起好友申请的时候就向 自己发送
+- server-toSelectUser-request_receiver - 好友请求发起者 发起好友申请的时候就向 处理好友请求者发送
+- server-toSelectUser-answer_self - 处理好友请求者 接收/拒绝 好友请求的时候发送给自己
+- server-toSelectUser-answer_requester - 处理好友请求者 接收/拒绝 好友请求的时候发送给发送请求的用户
+- server-toSelectUser-message_receiver - 转发给接收者的消息
+- server-toSelectUser-message_sender - 转发给发送者的消息
+
 ##### 监听的字段
 
 - user-newUserJoin - 新的用户加入
 - user-broadcast-message - 用户发送需要广播的信息
 - user-broadcast-file - 用户发送需要广播的文件，不支持大文件
+- user-broadcast-file_data - 用户决定获得该文件的时候使用
+- user-toSelectUser-request - 用户对选择的用户发送添加好友请求
+- user-toSelectUser-answer - 用户对好友请求进行回复 接收/拒绝
 - user-toSelectUser-message - 用户发送需要对选择的用户发送文本信息
 - user-toSelectUser-file - 用户对选择的用户发送文件
 
@@ -126,4 +138,48 @@ id:string; // socket.io 分配的 id
 custom:object;
 }[]
 
+```
+
+###### user-broadcast-file 广播客户端文件定制字段
+
+```
+{
+message:{name:文件名,value:文件},
+account,
+name,
+custom,
+}
+```
+
+###### server-broadcast-file 广播服务端文件定制字段
+
+```
+{
+message:文件名,
+account,
+name,
+custom:{fileIndex,type},
+}
+```
+
+##### user-broadcast-file_data
+
+```
+{
+  fileIndex,
+  account,
+  name,
+  custom,
+}
+```
+
+##### server-broadcast-file_data
+
+```
+{
+  fileData,
+  account,
+  name,
+  custom,
+}
 ```
